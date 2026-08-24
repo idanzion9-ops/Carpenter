@@ -475,6 +475,15 @@
           (Store.state.imported || []).length + ' projects currently loaded from feeds</p>' +
       '</div>' +
 
+      '<div class="panel"><h3>App version</h3>' +
+        '<p style="font-family:var(--f-mono);font-size:.82rem;margin-bottom:6px">Installed: <b>' +
+          esc(window.APP_VERSION || 'unknown') + '</b></p>' +
+        '<p style="font-size:.9rem;color:var(--ink-2)">Carpenter updates itself. When a new version is pushed to the repository, ' +
+          'the app picks it up the next time you open it and offers to switch over — there is no need to uninstall anything, ' +
+          'and nothing you have saved is lost.</p>' +
+        '<button class="btn small" data-action="check-update">Check for updates</button>' +
+      '</div>' +
+
       '<div class="panel"><h3>My data</h3>' +
         '<p style="font-size:.9rem;color:var(--ink-2)">Tools, sizes, notes and projects live in this browser. Export before you clear it.</p>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
@@ -588,6 +597,9 @@
       Store.state.feeds.splice(+btn.getAttribute('data-i'), 1); Store.save(); render();
     }
     else if (action === 'sync-feeds') syncFeeds();
+    else if (action === 'apply-update') applyUpdate();
+    else if (action === 'dismiss-update') { var b = document.querySelector('.updatebar'); if (b) b.remove(); }
+    else if (action === 'check-update') checkForUpdates();
     else if (action === 'export') {
       var blob = new Blob([Store.exportJSON()], { type: 'application/json' });
       var a = document.createElement('a');
@@ -738,9 +750,80 @@
     });
   }
 
+  /* ---------------- staying up to date ----------------
+     The app updates itself in place: new files are fetched from the network,
+     and a bar offers to switch over. Your tools, sizes, notes and projects
+     live in localStorage and are never touched by an update. */
+  var swReg = null, waitingWorker = null, reloading = false;
+
+  function initUpdates() {
+    if (!('serviceWorker' in navigator)) return;
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
+
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (reloading) return;
+      reloading = true;
+      location.reload();
+    });
+
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      swReg = reg;
+      if (reg.waiting && navigator.serviceWorker.controller) showUpdateBar(reg.waiting);
+      reg.addEventListener('updatefound', function () {
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', function () {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateBar(nw);
+        });
+      });
+      reg.update();
+      // Check again whenever the app comes back to the foreground, and hourly.
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) reg.update();
+      });
+      setInterval(function () { reg.update(); }, 60 * 60 * 1000);
+    }).catch(function () { /* no service worker: the app still runs normally */ });
+  }
+
+  function showUpdateBar(worker) {
+    waitingWorker = worker;
+    if (document.querySelector('.updatebar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'updatebar';
+    bar.innerHTML = '<span>A new version of Carpenter is ready. Your projects and tools stay as they are.</span>' +
+      '<button class="btn brass small" data-action="apply-update">Update now</button>' +
+      '<button class="btn ghost small" data-action="dismiss-update">Later</button>';
+    document.body.appendChild(bar);
+  }
+
+  function applyUpdate() {
+    if (!waitingWorker) { location.reload(); return; }
+    waitingWorker.postMessage('skip-waiting');
+    setTimeout(function () { if (!reloading) { reloading = true; location.reload(); } }, 1500);
+  }
+
+  function checkForUpdates() {
+    toast('Checking for a new version…');
+    if (swReg) swReg.update();
+    if (typeof fetch !== 'function') return;
+    fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data) { toast('Could not reach the server'); return; }
+        if (data.version && data.version !== window.APP_VERSION) {
+          toast('Version ' + data.version + ' found — updating');
+          setTimeout(function () { if (!reloading) { reloading = true; location.reload(); } }, 1200);
+        } else if (!document.querySelector('.updatebar')) {
+          toast('You are on the latest version');
+        }
+      })
+      .catch(function () { toast('Could not reach the server'); });
+  }
+
   /* ---------------- boot ---------------- */
   window.addEventListener('hashchange', render);
   render();
+  initUpdates();
   // Load the bundled community file once on first run so the app never looks empty.
   if (!(Store.state.imported || []).length && location.protocol !== 'file:' && typeof fetch === 'function') syncFeedsQuietly();
   function syncFeedsQuietly() {

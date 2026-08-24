@@ -28,7 +28,10 @@ same cut-list maths as the catalogue.
 **Project feeds.** Point the app at any JSON file of projects — your own, or somebody else's —
 from Settings. `data/community-projects.json` is a working example of the format.
 
-**Offline.** A service worker caches the app, so it keeps working in a shed with no signal.
+**Offline, and self-updating.** A service worker caches the app so it keeps working in a shed
+with no signal — but it fetches from the network first whenever there is one. Push a change to the
+repository and every installed phone picks it up on the next launch, shows an *Update now* bar,
+and switches over in place. Nobody has to uninstall and reinstall, and nothing saved is lost.
 
 ## Categories
 
@@ -51,6 +54,24 @@ catalogue will show.
 Push the repository, then in **Settings → Pages** choose **Deploy from a branch**, branch `main`,
 folder `/ (root)`. The site appears at `https://<user>.github.io/<repo>/` within a minute or two.
 `.nojekyll` is included so GitHub serves every file as-is.
+
+## Releasing an update
+
+Installed copies update themselves — you only push:
+
+    sh bump.sh                 # stamps today's date into sw.js, version.js and version.json
+    git add -A
+    git commit -m "Update"
+    git push
+
+`bump.sh` is optional (network-first fetching means new files arrive anyway), but bumping the
+version sweeps the old cache away cleanly and makes *Settings → App version* meaningful.
+
+On the phone the sequence is: open the app → the service worker checks in the background → an
+*Update now* bar appears → tap it → the app reloads on the new version. Settings also has a manual
+**Check for updates**. Saved tools, dimensions, build notes and personal projects are in
+`localStorage` and are never cleared by an update; `store.js` merges in any new fields a later
+version adds, so older saved data keeps working.
 
 ## Adding a project to the built-in catalogue
 
@@ -121,7 +142,10 @@ Photos are downscaled to 900 px and stored as data URLs, so a few dozen is a sen
 ```
 index.html                  app shell and navigation
 manifest.webmanifest        installable web app metadata
-sw.js                       offline cache
+sw.js                       offline cache and update channel
+version.json                version the running app compares itself against
+bump.sh                     stamps a new version into sw.js, version.js and version.json
+assets/js/version.js        the version the app reports in Settings
 assets/css/style.css        all styling
 assets/js/icons.js          line-art tool icons
 assets/js/tools.js          tool library and substitutions
