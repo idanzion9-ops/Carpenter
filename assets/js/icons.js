@@ -1,0 +1,58 @@
+/* Carpenter — line-art tool icons.
+   Each entry is the inner markup of a 24x24 SVG, stroked with currentColor. */
+window.ICONS = {
+  tape: '<rect x="2.5" y="8" width="13" height="11" rx="3"/><circle cx="9" cy="13.5" r="3"/><path d="M15.5 19h6l-2-3h-4z"/>',
+  square: '<path d="M4 4v16h16"/><path d="M4 20 20 4"/><path d="M7 20v-2M10 20v-3M13 20v-2"/>',
+  "marking-gauge": '<rect x="3" y="9" width="7" height="7" rx="1"/><path d="M10 12.5h11"/><path d="M21 10.5v4"/>',
+  bevel: '<path d="M3 19h18"/><path d="M5 19 17 5"/><path d="M9 19a7 7 0 0 1 2-5"/>',
+  compass: '<path d="M12 3v3"/><path d="M12 6 6 20"/><path d="m12 6 6 14"/><path d="M8.5 15h7"/>',
+  handsaw: '<path d="M3 8h13l4 4-4 4H3z" /><path d="M3 16h13"/><path d="m5 8 1 2 1-2 1 2 1-2 1 2 1-2 1 2 1-2 1 2 1-2"/>',
+  pullsaw: '<path d="M3 12h11"/><path d="M14 8h6v8h-6z"/><path d="m4 12 1 2 1-2 1 2 1-2 1 2 1-2 1 2 1-2"/>',
+  "coping-saw": '<path d="M5 5v14"/><path d="M5 5h9M5 19h9"/><path d="M14 5v14"/><path d="M17 12h4"/>',
+  "miter-box": '<path d="M3 9h18v9H3z"/><path d="M7 9 3 5M17 9l4-4"/><path d="M12 9v9"/>',
+  "circular-saw": '<circle cx="10" cy="12" r="5"/><path d="M3 17h14"/><path d="M15 8h5v5"/><path d="M10 7v10M5 12h10"/>',
+  "track-saw": '<circle cx="9" cy="11" r="4"/><path d="M2 19h20"/><path d="M2 16h20"/><path d="M14 7h5v6"/>',
+  "table-saw": '<path d="M3 13h18v6H3z"/><path d="M9 13a3 3 0 0 1 6 0"/><path d="M12 7v6"/>',
+  "miter-saw": '<path d="M3 18h18"/><path d="M5 18v-3h14v3"/><path d="M7 15 17 5"/><circle cx="17" cy="5" r="2"/>',
+  jigsaw: '<path d="M6 4h10v7H6z"/><path d="M9 11v7"/><path d="M4 18h14"/><path d="M16 6h3v4h-3"/>',
+  bandsaw: '<circle cx="9" cy="6" r="3"/><circle cx="9" cy="18" r="3"/><path d="M9 9v6"/><path d="M3 20h14"/>',
+  "scroll-saw": '<path d="M4 18h16"/><path d="M6 18V9h12"/><path d="M12 5v9"/><path d="M18 9v5"/>',
+  chisels: '<path d="M6 3h4v9l-2 8-2-8z"/><path d="M14 3h4v9l-2 8-2-8z"/>',
+  mallet: '<rect x="4" y="5" width="9" height="7" rx="1"/><path d="m13 9 7 9"/>',
+  "hand-plane": '<path d="M3 15h18v4H3z"/><path d="M6 15V9h9v6"/><path d="m11 15 4-7"/>',
+  "block-plane": '<path d="M4 14h16v4H4z"/><path d="M8 14V10h7v4"/>',
+  spokeshave: '<path d="M4 12h16"/><path d="M8 12V8h8v4"/><path d="M4 12v3M20 12v3"/>',
+  rasp: '<path d="m4 20 12-12 4 4L8 24z" transform="translate(0,-4)"/><path d="m8 12 4 4"/>',
+  "card-scraper": '<rect x="5" y="6" width="14" height="12" rx="1"/><path d="M5 15h14"/>',
+  router: '<path d="M5 16h14v4H5z"/><path d="M8 16V6h8v10"/><path d="M12 16v4"/>',
+  lathe: '<path d="M3 18h18"/><path d="M5 18v-4h14v4"/><path d="M7 14c3-6 7-6 10 0"/>',
+  drill: '<path d="M4 7h9v6H4z"/><path d="M13 10h8"/><path d="M7 13v6"/>',
+  "drill-press": '<path d="M4 20h16"/><path d="M17 20V4"/><path d="M8 8h9"/><path d="M11 8v5"/><path d="M7 16h10"/>',
+  forstner: '<path d="M9 3h6v10a3 3 0 0 1-6 0z"/><path d="M12 13v8"/>',
+  "hole-saw": '<path d="M7 5h10v8a5 5 0 0 1-10 0z"/><path d="M12 13v8"/><path d="M7 9h10"/>',
+  countersink: '<path d="M12 3 8 9h8z"/><path d="M12 9v12"/>',
+  "pocket-jig": '<rect x="3" y="10" width="18" height="8" rx="1"/><path d="m7 18 6-8"/><path d="m13 18 6-8"/>',
+  "dowel-jig": '<rect x="4" y="8" width="16" height="8" rx="1"/><path d="M9 8v8M15 8v8"/>',
+  biscuit: '<ellipse cx="12" cy="12" rx="8" ry="4"/><path d="M4 12h16"/>',
+  orbital: '<rect x="4" y="12" width="16" height="5" rx="1"/><path d="M8 12V7h8v5"/><circle cx="12" cy="9" r="1.5"/>',
+  "sanding-block": '<rect x="4" y="9" width="16" height="7" rx="2"/><path d="M4 16h16"/>',
+  clamps: '<path d="M3 6h18"/><path d="M6 6v6h4V6"/><path d="M16 6v10"/><path d="M13 16h6"/>',
+  "spring-clamps": '<path d="m5 5 8 6-8 6"/><path d="m19 5-8 6 8 6"/>',
+  "bench-vise": '<path d="M3 8h8v8H3z"/><path d="M11 12h10"/><path d="M18 9v6"/>',
+  hammer: '<path d="M4 8h8l3 3-4 2-2-2H4z"/><path d="m11 13 7 8"/>',
+  "brad-nailer": '<path d="M4 6h11v6H4z"/><path d="M9 12v8"/><path d="M15 9h5"/>',
+  glue: '<path d="M9 8h6v13H9z"/><path d="M10 8V5h4v3"/><path d="M12 2v3"/>',
+  "finish-brush": '<path d="M9 3h6v8H9z"/><path d="M8 11h8l-1 10H9z"/>',
+  "safety-glasses": '<path d="M3 10h18v4a3 3 0 0 1-3 3h-3l-3-3-3 3H6a3 3 0 0 1-3-3z"/>',
+  "ear-muffs": '<path d="M5 12a7 7 0 0 1 14 0"/><rect x="3" y="11" width="4" height="8" rx="2"/><rect x="17" y="11" width="4" height="8" rx="2"/>',
+  "dust-mask": '<path d="M4 9h16v4a6 6 0 0 1-6 5h-4a6 6 0 0 1-6-5z"/><path d="M4 12h16"/>',
+  "shop-vac": '<rect x="5" y="9" width="10" height="11" rx="2"/><path d="M15 12c4 0 4 6 0 6"/><path d="M8 9V6h4v3"/>',
+  straightedge: '<path d="M2 9h20v6H2z"/><path d="M6 9v3M10 9v4M14 9v3M18 9v4"/>',
+  plank: '<path d="M2 8h20v8H2z"/><path d="M4 12c4-2 6 2 10 0s4-2 6-1"/>',
+  wood: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>'
+};
+window.icon = function (name, cls) {
+  var d = window.ICONS[name] || window.ICONS.wood;
+  return '<svg class="ico ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+};

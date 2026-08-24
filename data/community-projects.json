@@ -1,0 +1,64 @@
+{
+  "name": "Carpenter starter feed",
+  "note": "Copy this file, add your own projects, and point Carpenter at the raw URL from Settings → Project feeds. Sizes are millimetres. stock is board, panel or dowel; a dowel part uses d for diameter instead of t and w.",
+  "projects": [
+    {
+      "id": "feed-step-stool",
+      "title": "Two-step kitchen stool",
+      "cat": "shop",
+      "level": 2,
+      "hours": "5 h",
+      "wood": "18 mm birch ply",
+      "blurb": "A stool short enough to live under a counter and strong enough to stand on with a full kettle.",
+      "partList": [
+        { "name": "Side", "qty": 2, "t": 18, "w": 300, "l": 450, "stock": "panel" },
+        { "name": "Top tread", "qty": 1, "t": 18, "w": 260, "l": 400, "stock": "panel" },
+        { "name": "Lower tread", "qty": 1, "t": 18, "w": 200, "l": 400, "stock": "panel" },
+        { "name": "Back brace", "qty": 1, "t": 18, "w": 120, "l": 400, "stock": "panel" },
+        { "name": "Front kick", "qty": 1, "t": 18, "w": 100, "l": 400, "stock": "panel" }
+      ],
+      "hardwareList": [
+        { "name": "50 mm screws", "qty": 20 },
+        { "name": "Non-slip pads", "qty": 4 }
+      ],
+      "tools": { "req": ["tape", "square", "circular-saw", "drill", "clamps", "glue", "orbital", "safety-glasses"], "nice": ["jigsaw", "router", "pocket-jig"] },
+      "steps": [
+        "Cut both sides together so the tread notches line up exactly.",
+        "Glue and screw the treads between the sides, checking for square each time.",
+        "Add the back brace last — it is what stops the stool racking sideways.",
+        "Round the front edge of each tread so bare feet are happy.",
+        "Stand on it hard before anyone else does."
+      ],
+      "finish": "Two coats of matte varnish; skip oil, it stays slippery.",
+      "safety": "Treads must be dead level. A stool that rocks is a stool that throws you."
+    },
+    {
+      "id": "feed-domino-set",
+      "title": "Hardwood domino set",
+      "cat": "toys",
+      "sub": "puzzles",
+      "level": 2,
+      "hours": "4 h",
+      "wood": "Maple or beech offcuts",
+      "blurb": "Twenty-eight tiles from one strip of hardwood, with drilled and filled pips.",
+      "partList": [
+        { "name": "Domino strip", "qty": 4, "t": 10, "w": 25, "l": 350, "stock": "board" },
+        { "name": "Box side", "qty": 2, "t": 8, "w": 32, "l": 200, "stock": "board" },
+        { "name": "Box end", "qty": 2, "t": 8, "w": 32, "l": 60, "stock": "board" },
+        { "name": "Box base", "qty": 1, "t": 4, "w": 60, "l": 200, "stock": "panel" }
+      ],
+      "hardwareList": [{ "name": "Black epoxy or wax crayon for pips", "qty": 1 }],
+      "tools": { "req": ["tape", "square", "pullsaw", "drill", "sanding-block", "glue", "clamps", "safety-glasses"], "nice": ["table-saw", "drill-press", "forstner", "router"] },
+      "steps": [
+        "Mill the strips to a consistent 10 × 25 mm before cutting any tiles.",
+        "Crosscut 28 tiles at 50 mm using a stop block so they are identical.",
+        "Mark the centre line on every tile with a marking gauge.",
+        "Drill the pips 3 mm deep with a 4 mm bit, using a paper template.",
+        "Fill the pips with black wax or epoxy, then sand the faces flat.",
+        "Build the box to fit the finished stack, not to a drawing."
+      ],
+      "finish": "Wax only — tiles need to slide.",
+      "safety": "Small tiles near a spinning blade need a push stick and a stop block, never fingers."
+    }
+  ]
+}

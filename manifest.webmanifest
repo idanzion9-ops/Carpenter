@@ -1,0 +1,14 @@
+{
+  "name": "Carpenter — cut lists & workshop log",
+  "short_name": "Carpenter",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#E7D9BE",
+  "theme_color": "#241A12",
+  "description": "Woodworking projects with parametric cut lists, timber estimates and tool substitutions.",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
