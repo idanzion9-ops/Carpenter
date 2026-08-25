@@ -171,7 +171,7 @@
     var m = toolMatch(p);
     var status = Store.statusOf(p.id);
     return '<a class="card" href="#/project/' + p.id + '">' +
-      (p.photo ? '<img class="thumb" src="' + p.photo + '" alt="">' : '') +
+      '<span class="figure">' + projectArt(p, Store.params(p)) + '</span>' +
       '<span class="cat">' + esc(catName(p.cat)) + (p.sub ? ' · ' + esc(p.sub) : '') + '</span>' +
       '<h3>' + esc(p.title) + '</h3>' +
       '<p>' + esc(p.blurb || '') + '</p>' +
@@ -245,7 +245,7 @@
       var t = TOOL_BY_ID[tid];
       if (!t) return '';
       var have = Store.owns(tid);
-      var block = '<div class="toolrow ' + (have ? '' : 'missing') + '">' + icon(tid) +
+      var block = '<div class="toolrow ' + (have ? '' : 'missing') + '">' + toolArt(tid) +
         '<span class="name">' + esc(t.name) + '</span>' +
         '<span class="grab">' + (have
           ? '<span class="pill ok">On my board</span>'
@@ -262,7 +262,7 @@
 
     var niceHTML = ((project.tools && project.tools.nice) || []).map(function (tid) {
       var t = TOOL_BY_ID[tid]; if (!t) return '';
-      return '<div class="toolrow">' + icon(tid) + '<span class="name">' + esc(t.name) + '</span>' +
+      return '<div class="toolrow">' + toolArt(tid) + '<span class="name">' + esc(t.name) + '</span>' +
         '<span class="grab pill">' + (Store.owns(tid) ? 'Owned' : 'Speeds things up') + '</span></div>';
     }).join('');
 
@@ -287,7 +287,10 @@
 
       '<div class="detail-grid">' +
         '<div>' +
-          (project.paramDefs && project.paramDefs.length ? '<div class="panel"><h3>Size it for your room</h3>' +
+          '<div class="hero-figure" id="hero-art">' + projectArt(project, params) + '</div>' +
+          '<span class="figure-note">' + (project.photo ? 'Your photo' :
+            'Illustration — drawn from the dimensions below') + '</span>' +
+          (project.paramDefs && project.paramDefs.length ? '<div class="panel" style="margin-top:18px"><h3>Size it for your room</h3>' +
             dims + '<button class="btn ghost small" data-action="reset-params">Back to standard size</button></div>' : '') +
           '<div class="panel" id="cutlist" style="padding:0;border:0;background:none">' + ticketHTML(project, params) + '</div>' +
         '</div>' +
@@ -304,7 +307,17 @@
           '</div>' +
 
           (project.steps && project.steps.length ? '<div class="panel"><h3>How it goes together</h3>' +
-            '<ol class="steps">' + project.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol></div>' : '') +
+            '<p class="step-hint">Tap a number for a diagram of the technique</p>' +
+            '<ol class="steps">' + project.steps.map(function (text, i) {
+              var art = stepArt(text);
+              var n = (i + 1) < 10 ? '0' + (i + 1) : String(i + 1);
+              return '<li>' +
+                '<button class="step-no" data-action="step-art" data-i="' + i + '" ' +
+                  'aria-expanded="false" aria-label="Show a diagram for step ' + (i + 1) + '">' + n + '</button>' +
+                '<div class="step-body"><p>' + esc(text) + '</p>' +
+                  '<figure class="step-fig" id="fig-' + i + '" hidden>' + art.svg +
+                  '<figcaption>' + esc(art.title) + '</figcaption></figure></div></li>';
+            }).join('') + '</ol></div>' : '') +
 
           (project.finish || project.safety ? '<div class="panel">' +
             (project.finish ? '<h3>Finish</h3><p>' + esc(project.finish) + '</p>' : '') +
@@ -332,7 +345,7 @@
           var on = Store.owns(t.id);
           return '<div class="peg-wrap ' + (on ? 'on' : '') + '">' +
             '<button class="peg ' + (on ? 'on' : '') + '" data-action="toggle-tool" data-tool="' + t.id + '" ' +
-            'aria-pressed="' + on + '">' + icon(t.id) + '<span>' + esc(t.name) + '</span></button>' +
+            'aria-pressed="' + on + '">' + toolArt(t.id) + '<span>' + esc(t.name) + '</span></button>' +
             '<span class="tick">✓</span></div>';
         }).join('') + '</div></div>';
     }).join('');
@@ -584,6 +597,14 @@
       Store.setNote(r.path.slice(9), document.getElementById('note').value);
       toast('Note saved');
     }
+    else if (action === 'step-art') {
+      var fig = document.getElementById('fig-' + btn.getAttribute('data-i'));
+      if (fig) {
+        var open = fig.hasAttribute('hidden');
+        if (open) fig.removeAttribute('hidden'); else fig.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+    }
     else if (action === 'print') window.print();
     else if (action === 'delete-mine') {
       if (confirm('Delete this project? This cannot be undone.')) {
@@ -633,6 +654,8 @@
       var def = project.paramDefs.filter(function (d) { return d.k === t.dataset.param; })[0];
       if (out) out.textContent = isCount(def.label) ? params[t.dataset.param] : L(params[t.dataset.param]);
       document.getElementById('cutlist').innerHTML = ticketHTML(project, params);
+      var hero = document.getElementById('hero-art');
+      if (hero && !project.photo) hero.innerHTML = projectArt(project, params);
     }
     if (t.id === 'search') {
       var q = t.value;

@@ -28,6 +28,11 @@ same cut-list maths as the catalogue.
 **Project feeds.** Point the app at any JSON file of projects — your own, or somebody else's —
 from Settings. `data/community-projects.json` is a working example of the format.
 
+**Drawn, not stock-photographed.** Every tool is an original colour illustration, every project
+has a generated elevation that follows its own dimensions, and every written step can be tapped
+open to reveal a flat-pack style diagram of the technique it describes. Nothing is fetched from an
+image host, so it all works offline and none of it can rot.
+
 **Offline, and self-updating.** A service worker caches the app so it keeps working in a shed
 with no signal — but it fetches from the network first whenever there is one. Push a change to the
 repository and every installed phone picks it up on the next launch, shows an *Update now* bar,
@@ -170,7 +175,11 @@ version.json                version the running app compares itself against
 bump.sh                     stamps a new version into sw.js, version.js and version.json
 assets/js/version.js        the version the app reports in Settings
 assets/css/style.css        all styling
-assets/js/icons.js          line-art tool icons
+assets/js/icons.js          line-art tool icons (small inline use)
+assets/js/art-tools.js      full-colour tool illustrations
+assets/js/art-projects.js   generated project elevations, driven by the dimensions
+assets/js/art-steps.js      assembly diagrams, matched to each step by what it asks you to do
+assets/logo.svg             the plane-and-shaving mark
 assets/js/tools.js          tool library and substitutions
 assets/js/projects.js       built-in project catalogue
 assets/js/calc.js           cut list maths, bin packing, board feet

@@ -4,14 +4,17 @@
    Nothing here touches localStorage, so tools, sizes, notes and personal
    projects survive every update. */
 
-var VERSION = '2026.08.24.1';
+var VERSION = '2026.08.25.1';
 var CACHE = 'carpenter-' + VERSION;
 
 var CORE = [
   './', 'index.html', 'manifest.webmanifest', 'version.json',
   'assets/css/style.css',
-  'assets/js/version.js', 'assets/js/icons.js', 'assets/js/tools.js',
-  'assets/js/projects.js', 'assets/js/calc.js', 'assets/js/store.js', 'assets/js/app.js',
+  'assets/js/version.js', 'assets/js/icons.js',
+  'assets/js/art-tools.js', 'assets/js/art-projects.js', 'assets/js/art-steps.js',
+  'assets/js/tools.js', 'assets/js/projects.js', 'assets/js/calc.js',
+  'assets/js/store.js', 'assets/js/app.js',
+  'assets/logo.svg', 'assets/icon-192.png', 'assets/icon-512.png',
   'data/community-projects.json'
 ];
 
