@@ -430,6 +430,12 @@
       '</div></section>';
   }
 
+  function nativeVersionLine() {
+    var nb = nativeBridge();
+    if (!nb) return '';
+    try { return ' · app shell <b>' + esc(nb.appVersion()) + '</b>'; } catch (e) { return ''; }
+  }
+
   function viewSettings() {
     var s = S();
     var feeds = (Store.state.feeds || []).map(function (f, i) {
@@ -476,11 +482,13 @@
       '</div>' +
 
       '<div class="panel"><h3>App version</h3>' +
-        '<p style="font-family:var(--f-mono);font-size:.82rem;margin-bottom:6px">Installed: <b>' +
-          esc(window.APP_VERSION || 'unknown') + '</b></p>' +
-        '<p style="font-size:.9rem;color:var(--ink-2)">Carpenter updates itself. When a new version is pushed to the repository, ' +
-          'the app picks it up the next time you open it and offers to switch over — there is no need to uninstall anything, ' +
-          'and nothing you have saved is lost.</p>' +
+        '<p style="font-family:var(--f-mono);font-size:.82rem;margin-bottom:6px">Content: <b>' +
+          esc(window.APP_VERSION || 'unknown') + '</b>' + nativeVersionLine() + '</p>' +
+        '<p style="font-size:.9rem;color:var(--ink-2)">' + (nativeBridge()
+          ? 'The Android app checks the repository on every launch, downloads any new version of the app itself and swaps it in. ' +
+            'You never reinstall, and your tools, dimensions, notes and projects are untouched.'
+          : 'Carpenter updates itself. When a new version is pushed to the repository, the app picks it up the next time you open it ' +
+            'and offers to switch over — there is no need to uninstall anything, and nothing you have saved is lost.') + '</p>' +
         '<button class="btn small" data-action="check-update">Check for updates</button>' +
       '</div>' +
 
@@ -756,7 +764,16 @@
      live in localStorage and are never touched by an update. */
   var swReg = null, waitingWorker = null, reloading = false;
 
+  /* Inside the Android app there is a native bridge that handles updates:
+     it downloads the new web files and swaps them in without reinstalling. */
+  function nativeBridge() {
+    try {
+      return (window.Carpenter && typeof window.Carpenter.checkForUpdate === 'function') ? window.Carpenter : null;
+    } catch (e) { return null; }
+  }
+
   function initUpdates() {
+    if (nativeBridge()) return;              // the app shell already checks on every launch
     if (!('serviceWorker' in navigator)) return;
     if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
 
@@ -803,6 +820,8 @@
   }
 
   function checkForUpdates() {
+    var nb = nativeBridge();
+    if (nb) { nb.checkForUpdate(); return; }
     toast('Checking for a new version…');
     if (swReg) swReg.update();
     if (typeof fetch !== 'function') return;

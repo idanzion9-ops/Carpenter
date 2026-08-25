@@ -1,0 +1,84 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the app version
+        id: v
+        run: |
+          V=$(python3 -c "import json;print(json.load(open('version.json'))['version'])")
+          echo "name=$V" >> "$GITHUB_OUTPUT"
+          echo "Building version $V"
+
+      - name: Bundle the web app into the APK
+        run: |
+          rm -rf android/app/src/main/assets/www
+          mkdir -p android/app/src/main/assets/www
+          cp -r index.html manifest.webmanifest version.json sw.js assets data \
+                android/app/src/main/assets/www/
+          find android/app/src/main/assets/www -type f | head -30
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build the release APK
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: ${{ steps.v.outputs.name }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          REPO_BRANCH: ${{ github.ref_name }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Name the file
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk out/carpenter.apk
+          ls -lh out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: carpenter-apk
+          path: out/carpenter.apk
+
+      - name: Publish it at a permanent download link
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Carpenter — latest APK
+          body: |
+            Version ${{ steps.v.outputs.name }} (build ${{ github.run_number }})
+
+            Install straight over the previous version — the app is always signed
+            with the same key, so Android treats it as an update and keeps every
+            saved tool, dimension, note and project.
+
+            Direct download:
+            https://github.com/${{ github.repository }}/releases/download/latest/carpenter.apk
+          files: out/carpenter.apk
+          make_latest: true

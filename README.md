@@ -55,6 +55,29 @@ Push the repository, then in **Settings → Pages** choose **Deploy from a branc
 folder `/ (root)`. The site appears at `https://<user>.github.io/<repo>/` within a minute or two.
 `.nojekyll` is included so GitHub serves every file as-is.
 
+## The Android app
+
+`.github/workflows/apk.yml` builds a signed APK on every push to `main` and publishes it at a
+permanent link:
+
+    https://github.com/<owner>/<repo>/releases/download/latest/carpenter.apk
+
+The APK is a WebView shell (`android/`) that serves the same web app from a fixed internal origin.
+Two consequences, both deliberate:
+
+* **The APK is always signed with `android/keystore.jks`, which is committed to the repository.**
+  A rebuilt APK therefore installs *over* the existing app as an update. If the key ever changed,
+  Android would refuse the install and demand an uninstall first, taking all saved data with it.
+  This is a personal-use key with a known password — do not reuse it for anything published to
+  Google Play.
+* **The app updates its own content without a new APK.** On every launch it reads `version.json`
+  from the repository; if the version differs from what it has, it downloads the repository zip,
+  unpacks the web files into internal storage and reloads. Only changes to the Java shell need a
+  fresh APK.
+
+Everything saved lives in `localStorage` on the fixed origin `https://appassets.androidplatform.net`,
+so it survives both kinds of update.
+
 ## Releasing an update
 
 Installed copies update themselves — you only push:
