@@ -4,7 +4,7 @@
    Nothing here touches localStorage, so tools, sizes, notes and personal
    projects survive every update. */
 
-var VERSION = '2026.08.25.1';
+var VERSION = '2026.08.25.2';
 var CACHE = 'carpenter-' + VERSION;
 
 var CORE = [

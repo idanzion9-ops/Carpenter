@@ -109,7 +109,7 @@
         html += '<div style="padding:14px 16px 0"><div class="note-strip">Longer than your stock: ' +
           esc(res.oversize.join(', ')) + '. Either buy longer stock or join these parts.</div></div>';
       }
-      html += '<div style="padding:12px 16px 0;font-family:var(--f-mono);font-size:.66rem;color:var(--ink-3)">' +
+      html += '<div style="padding:12px 16px 0;font-size:.74rem;color:var(--ink-3)">' +
         'Includes ' + S().waste + '% waste · ' + L(S().kerf) + ' kerf · stock ' + L(S().stockLength) + '</div>';
     }
     return html + '</div>';
@@ -131,11 +131,11 @@
             '<a class="btn" href="#/browse">Browse projects</a>' +
             '<a class="btn ghost" href="#/workshop">Set up my workshop</a>' +
           '</div>' +
-          '<p style="margin-top:22px;font-family:var(--f-mono);font-size:.74rem;color:var(--ink-3)">' +
+          '<p style="margin-top:22px;font-size:.86rem;color:var(--ink-3)">' +
             allProjects().length + ' projects · ' + TOOLS.length + ' tools · ' + ready + ' buildable with the tools you own</p>' +
         '</div>' +
         '<div>' + ticketHTML(featured, Store.params(featured), true) +
-          '<p style="margin-top:26px;font-family:var(--f-mono);font-size:.7rem;color:var(--ink-3)">Live example: ' +
+          '<p style="margin-top:26px;font-size:.84rem;color:var(--ink-3)">Live example: ' +
           esc(featured.title) + ' at ' + L(Store.params(featured).L) + '. Change any dimension and this list rewrites itself.</p>' +
         '</div>' +
       '</div></section>' +
@@ -446,7 +446,7 @@
   function nativeVersionLine() {
     var nb = nativeBridge();
     if (!nb) return '';
-    try { return ' · app shell <b>' + esc(nb.appVersion()) + '</b>'; } catch (e) { return ''; }
+    try { return ' · app shell <b style="font-family:var(--f-mono)">' + esc(nb.appVersion()) + '</b>'; } catch (e) { return ''; }
   }
 
   function viewSettings() {
@@ -490,12 +490,12 @@
           '<button class="btn small" data-action="add-feed">Add feed</button>' +
           '<button class="btn ghost small" data-action="sync-feeds">Fetch projects now</button>' +
         '</div>' +
-        '<p style="margin-top:10px;font-family:var(--f-mono);font-size:.72rem;color:var(--ink-3)">' +
+        '<p style="margin-top:10px;font-size:.82rem;color:var(--ink-3)">' +
           (Store.state.imported || []).length + ' projects currently loaded from feeds</p>' +
       '</div>' +
 
       '<div class="panel"><h3>App version</h3>' +
-        '<p style="font-family:var(--f-mono);font-size:.82rem;margin-bottom:6px">Content: <b>' +
+        '<p style="font-size:.9rem;margin-bottom:6px">Content: <b style="font-family:var(--f-mono)">' +
           esc(window.APP_VERSION || 'unknown') + '</b>' + nativeVersionLine() + '</p>' +
         '<p style="font-size:.9rem;color:var(--ink-2)">' + (nativeBridge()
           ? 'The Android app checks the repository on every launch, downloads any new version of the app itself and swaps it in. ' +
